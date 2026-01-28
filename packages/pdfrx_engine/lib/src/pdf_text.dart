@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 
@@ -151,6 +152,17 @@ class PdfPageText {
   int get hashCode => pageNumber.hashCode ^ fullText.hashCode ^ charRects.hashCode ^ fragments.hashCode;
 }
 
+/// A container for the rich text result.
+class PdfPageRichText {
+  const PdfPageRichText({
+    required this.fullText,
+    required this.fragments,
+  });
+
+  final String fullText;
+  final List<PdfPageRichTextFragment> fragments;
+}
+
 /// Text direction in PDF page.
 enum PdfTextDirection {
   /// Left to Right
@@ -213,6 +225,37 @@ class PdfPageTextFragment {
 
   @override
   int get hashCode => index.hashCode ^ bounds.hashCode ^ text.hashCode;
+}
+
+/// A subclass of [PdfPageTextFragment] that includes font styling metadata.
+class PdfPageRichTextFragment extends PdfPageTextFragment {
+  const PdfPageRichTextFragment({
+    required this.fontSize,
+    required this.fontWeight,
+    required this.isItalic,
+    required this.isForceBold,
+    required super.index,
+    required super.length,
+    required super.bounds,
+    required super.charRects,
+    required super.pageText,
+    required super.direction,
+  });
+
+  /// Font size in PDF points (approx 1/72 inch).
+  final double fontSize;
+
+  /// The visual weight (e.g., 400=Normal, 700=Bold).
+  final FontWeight fontWeight;
+
+  /// True if the text is Italic.
+  final bool isItalic;
+
+  /// True if the PDF forces a fake bold effect.
+  final bool isForceBold;
+
+  /// Helper to check effective bold (either True Bold or Force Bold).
+  bool get isEffectiveBold => fontWeight.index >= FontWeight.w600.index || isForceBold;
 }
 
 /// Text range in a PDF page, which is typically used to describe text selection.

@@ -115,6 +115,9 @@ extension PdfPageBaseExtensions on PdfPage {
   Future<PdfPageText> loadStructuredText({bool ensureLoaded = true}) =>
       PdfTextFormatter.loadStructuredText(this, pageNumberOverride: pageNumber);
 
+  Future<PdfPageRichText> loadRichText()
+  => throw UnimplementedError('loadRichText is not implemented yet.');
+
   /// Stream of page status change events for this page.
   ///
   /// The event is based on the page position (page number), so the page instance identity may change if the page is
