@@ -155,12 +155,30 @@ class PdfPageText {
 /// A container for the rich text result.
 class PdfPageRichText {
   const PdfPageRichText({
+    required this.pageNumber,
     required this.fullText,
+    required this.charRects,
     required this.fragments,
   });
 
+  /// Page number. The first page is 1.
+  final int pageNumber;
+
+  /// Full text of the page.
   final String fullText;
+
+  /// Bounds corresponding to characters in the full text.
+  final List<PdfRect> charRects;
+
+  /// Get text fragments that organizes the full text structure.
+  ///
+  /// The [fullText] is the composed result of all fragments' text.
+  /// Any character in [fullText] must be included in one of the fragments.
   final List<PdfPageRichTextFragment> fragments;
+
+  PdfPageText toPdfPageText() {
+    return PdfPageText(pageNumber: pageNumber, fullText: fullText, charRects: charRects, fragments: fragments);
+  }
 }
 
 /// Text direction in PDF page.
@@ -229,7 +247,8 @@ class PdfPageTextFragment {
 
 /// A subclass of [PdfPageTextFragment] that includes font styling metadata.
 class PdfPageRichTextFragment extends PdfPageTextFragment {
-  const PdfPageRichTextFragment({
+  PdfPageRichTextFragment({
+    required PdfPageRichText pageText,
     required this.fontSize,
     required this.fontWeight,
     required this.isItalic,
@@ -238,9 +257,8 @@ class PdfPageRichTextFragment extends PdfPageTextFragment {
     required super.length,
     required super.bounds,
     required super.charRects,
-    required super.pageText,
     required super.direction,
-  });
+  }) : super(pageText: pageText.toPdfPageText());
 
   /// Font size in PDF points (approx 1/72 inch).
   final double fontSize;
