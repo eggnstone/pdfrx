@@ -13,10 +13,7 @@ extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
         final charCount = pdfium.FPDFText_CountChars(textPage);
         final sb = StringBuffer();
         final charRects = <PdfRect>[];
-        final fontSizes = <double>[];
-        final fontWeights = <int>[];
-        final fontNames = <String>[];
-        final fontFlags = <int>[];
+        final fontInfos = <PdfFontInfo>[];
 
         // Allocate memory for the name buffer and flags buffer
         const bufferSize = 256;
@@ -36,9 +33,8 @@ extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
           );
           charRects.add(_PdfPagePdfium._rectFromLTRBBuffer(rectBuffer, params.bbLeft, params.bbBottom));
 
-          fontSizes.add(pdfium.FPDFText_GetFontSize(textPage, i));
-
-          fontWeights.add(pdfium.FPDFText_GetFontWeight(textPage, i));
+          var fontSize = pdfium.FPDFText_GetFontSize(textPage, i);
+          var fontWeight = pdfium.FPDFText_GetFontWeight(textPage, i);
 
           final actualNameLength = pdfium.FPDFText_GetFontInfo(
             textPage,
@@ -50,12 +46,10 @@ extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
 
           if (actualNameLength > 0) {
             final fontName = nameBuffer.cast<Utf8>().toDartString();
-            final fontFlags1 = flagsBuffer.value;
-            fontNames.add(fontName);
-            fontFlags.add(fontFlags1);
+            final fontFlags = flagsBuffer.value;
+            fontInfos.add(PdfFontInfo(name: fontName, size: fontSize, weight: fontWeight, flags: fontFlags));
           } else {
-            fontNames.add('');
-            fontFlags.add(0);
+            fontInfos.add(PdfFontInfo(name: '', size: fontSize, weight: fontWeight, flags: 0));
           }
         }
 
@@ -63,7 +57,7 @@ extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
         calloc.free(nameBuffer);
         calloc.free(flagsBuffer);
 
-        return PdfPageRichRawText(sb.toString(), charRects, fontSizes);
+        return PdfPageRichRawText(sb.toString(), charRects, fontInfos);
       } finally {
         pdfium.FPDFText_ClosePage(textPage);
         pdfium.FPDF_ClosePage(page);

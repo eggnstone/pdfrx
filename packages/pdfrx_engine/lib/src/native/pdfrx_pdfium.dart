@@ -19,6 +19,7 @@ import '../pdf_dest.dart';
 import '../pdf_document.dart';
 import '../pdf_document_event.dart';
 import '../pdf_exception.dart';
+import '../pdf_font_info.dart';
 import '../pdf_font_query.dart';
 import '../pdf_image.dart';
 import '../pdf_link.dart';

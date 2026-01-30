@@ -1,9 +1,9 @@
 import 'dart:collection';
-import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
 
 import './mock/string_buffer_wrapper.dart' if (dart.library.io) './native/string_buffer_wrapper.dart';
+import 'pdf_font_info.dart';
 import 'pdf_page.dart';
 import 'pdf_rect.dart';
 import 'pdf_text.dart';

@@ -30,7 +30,7 @@ class PdfPageRichText {
 }
 
 class PdfPageRichRawText {
-  PdfPageRichRawText(this.fullText, this.charRects, this.fontSizes);
+  PdfPageRichRawText(this.fullText, this.charRects, this.fontInfos);
 
   /// Full text of the page.
   final String fullText;
@@ -38,7 +38,7 @@ class PdfPageRichRawText {
   /// Bounds corresponding to characters in the full text.
   final List<PdfRect> charRects;
 
-  final List<double> fontSizes;
+  final List<PdfFontInfo> fontInfos;
 
   @override
   bool operator ==(Object other) {
@@ -47,21 +47,18 @@ class PdfPageRichRawText {
     return other is PdfPageRichRawText &&
         other.fullText == fullText &&
         listEquals(other.charRects, charRects) &&
-        listEquals(other.fontSizes, fontSizes);
+        listEquals(other.fontInfos, fontInfos);
   }
 
   @override
-  int get hashCode => fullText.hashCode ^ charRects.hashCode ^ fontSizes.hashCode;
+  int get hashCode => fullText.hashCode ^ charRects.hashCode ^ fontInfos.hashCode;
 }
 
 /// A subclass of [PdfPageTextFragment] that includes font styling metadata.
 class PdfPageRichTextFragment extends PdfPageTextFragment {
   PdfPageRichTextFragment({
     required PdfPageRichText pageText,
-    required this.fontSize,
-    required this.fontWeight,
-    required this.isItalic,
-    required this.isForceBold,
+    required this.fontInfo,
     required super.index,
     required super.length,
     required super.bounds,
@@ -69,18 +66,6 @@ class PdfPageRichTextFragment extends PdfPageTextFragment {
     required super.direction,
   }) : super(pageText: pageText.toPdfPageText());
 
-  /// Font size in PDF points (approx 1/72 inch).
-  final double fontSize;
-
-  /// The visual weight (e.g., 400=Normal, 700=Bold).
-  final FontWeight fontWeight;
-
-  /// True if the text is Italic.
-  final bool isItalic;
-
-  /// True if the PDF forces a fake bold effect.
-  final bool isForceBold;
-
-  /// Helper to check effective bold (either True Bold or Force Bold).
-  bool get isEffectiveBold => fontWeight.index >= FontWeight.w600.index || isForceBold;
+  final PdfFontInfo fontInfo;
+  //bool get isEffectiveBold => fontWeight.index >= FontWeight.w600.index || isForceBold;
 }

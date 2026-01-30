@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
 
+import 'pdf_font_info.dart';
 import 'pdf_page.dart';
 import 'pdf_rect.dart';
 import 'utils/list_equals.dart';
