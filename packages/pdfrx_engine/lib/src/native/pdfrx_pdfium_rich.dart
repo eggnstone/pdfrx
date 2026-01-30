@@ -14,8 +14,18 @@ extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
         final sb = StringBuffer();
         final charRects = <PdfRect>[];
         final fontSizes = <double>[];
+        final fontWeights = <int>[];
+        final fontNames = <String>[];
+        final fontFlags = <int>[];
+
+        // Allocate memory for the name buffer and flags buffer
+        const bufferSize = 256;
+        final nameBuffer = calloc<Uint8>(bufferSize);
+        final flagsBuffer = calloc<Int>();
+
         for (var i = 0; i < charCount; i++) {
           sb.writeCharCode(pdfium.FPDFText_GetUnicode(textPage, i));
+
           pdfium.FPDFText_GetCharBox(
             textPage,
             i,
@@ -25,9 +35,34 @@ extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
             rectBuffer.offset(doubleSize), // T
           );
           charRects.add(_PdfPagePdfium._rectFromLTRBBuffer(rectBuffer, params.bbLeft, params.bbBottom));
-          final fontSize = pdfium.FPDFText_GetFontSize(textPage, i);
-          fontSizes.add(fontSize);
+
+          fontSizes.add(pdfium.FPDFText_GetFontSize(textPage, i));
+
+          fontWeights.add(pdfium.FPDFText_GetFontWeight(textPage, i));
+
+          final actualNameLength = pdfium.FPDFText_GetFontInfo(
+            textPage,
+            i,
+            nameBuffer.cast<Void>(),
+            bufferSize,
+            flagsBuffer,
+          );
+
+          if (actualNameLength > 0) {
+            final fontName = nameBuffer.cast<Utf8>().toDartString();
+            final fontFlags1 = flagsBuffer.value;
+            fontNames.add(fontName);
+            fontFlags.add(fontFlags1);
+          } else {
+            fontNames.add('');
+            fontFlags.add(0);
+          }
         }
+
+        // Free allocated memory
+        calloc.free(nameBuffer);
+        calloc.free(flagsBuffer);
+
         return PdfPageRichRawText(sb.toString(), charRects, fontSizes);
       } finally {
         pdfium.FPDFText_ClosePage(textPage);
