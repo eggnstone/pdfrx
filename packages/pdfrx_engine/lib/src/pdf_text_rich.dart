@@ -67,5 +67,4 @@ class PdfPageRichTextFragment extends PdfPageTextFragment {
   }) : super(pageText: pageText.toPdfPageText());
 
   final PdfFontInfo fontInfo;
-  //bool get isEffectiveBold => fontWeight.index >= FontWeight.w600.index || isForceBold;
 }

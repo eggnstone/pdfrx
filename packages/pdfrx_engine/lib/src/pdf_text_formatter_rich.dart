@@ -141,7 +141,7 @@ extension PdfTextFormatterRichExtension on PdfTextFormatter {
           continue;
         }
         final nextFontInfo = inputFontInfos[next];
-        if (!curFontInfo.isSimilarTo(nextFontInfo)) {
+        if (curFontInfo != nextFontInfo) {
           list.add((start: curStart, end: next, dir: dir, fontInfo: curFontInfo));
           curStart = next;
           curFontInfo = nextFontInfo;

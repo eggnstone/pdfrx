@@ -1,8 +1,6 @@
 class PdfFontInfo {
   const PdfFontInfo({required this.flags, required this.name, required this.size, required this.weight});
 
-  static const double fontSizeEpsilon = 0.01;
-
   final int flags;
   final String name;
   final double size;
@@ -11,10 +9,6 @@ class PdfFontInfo {
   @override
   int get hashCode {
     return flags.hashCode ^ name.hashCode ^ size.hashCode ^ weight.hashCode;
-  }
-
-  bool isSimilarTo(PdfFontInfo other) {
-    return this == other || (size - other.size).abs() < fontSizeEpsilon;
   }
 
   @override
