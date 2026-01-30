@@ -1,7 +1,7 @@
 part of 'pdfrx_pdfium.dart';
 
 extension _PdfrxPdfiumRichExtension on _PdfPagePdfium {
-  Future<PdfPageRichRawText?> loadRichText3() async {
+  Future<PdfPageRichRawText?> _loadRichRawText() async {
     if (document.isDisposed || !isLoaded) return null;
     return await BackgroundWorker.computeWithArena((arena, params) {
       final doubleSize = sizeOf<Double>();

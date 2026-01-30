@@ -91,7 +91,7 @@ abstract class PdfPage {
   /// If the page is not loaded yet (progressive loading case only), this function returns null.
   Future<PdfPageRawText?> loadText();
 
-  Future<PdfPageRichRawText?> loadRichText2();
+  Future<PdfPageRichRawText?> loadRichRawText();
 
   /// Load links.
   ///

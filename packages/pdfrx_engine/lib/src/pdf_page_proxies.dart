@@ -78,7 +78,7 @@ class PdfPageRenumbered implements PdfPageProxy {
   Future<PdfPageRawText?> loadText() => basePage.loadText();
 
   @override
-  Future<PdfPageRichRawText?> loadRichText2() => basePage.loadRichText2();
+  Future<PdfPageRichRawText?> loadRichRawText() => basePage.loadRichRawText();
 
   @override
   Future<PdfImage?> render({
@@ -180,7 +180,7 @@ class PdfPageRotated implements PdfPageProxy {
   Future<PdfPageRawText?> loadText() => basePage.loadText();
 
   @override
-  Future<PdfPageRichRawText?> loadRichText2() => basePage.loadRichText2();
+  Future<PdfPageRichRawText?> loadRichRawText() => basePage.loadRichRawText();
 
   @override
   Future<List<PdfLink>> loadLinks({bool compact = false, bool enableAutoLinkDetection = true}) =>

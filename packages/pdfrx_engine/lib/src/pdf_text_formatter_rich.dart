@@ -255,7 +255,7 @@ extension PdfTextFormatterRichExtension on PdfTextFormatter {
   }
 
   static Future<PdfPageRichRawText?> _loadRichText(PdfPage page) async {
-    final input = await page.loadRichText2();
+    final input = await page.loadRichRawText();
     if (input == null) {
       return null;
     }

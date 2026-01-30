@@ -1327,7 +1327,7 @@ class _PdfPagePdfium extends PdfPage {
 
   @override
   /// Delegating method to the rich-text implementation in the part file.
-  Future<PdfPageRichRawText?> loadRichText2() async => loadRichText3();
+  Future<PdfPageRichRawText?> loadRichRawText() async => _loadRichRawText();
 
   @override
   Future<List<PdfLink>> loadLinks({bool compact = false, bool enableAutoLinkDetection = true}) async {
