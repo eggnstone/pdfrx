@@ -38,6 +38,8 @@ import 'pdfium.dart';
 import 'pdfium_file_access.dart';
 import 'worker.dart';
 
+part 'pdfrx_pdfium_rich.dart';
+
 Directory? _appLocalFontPath;
 
 bool _initialized = false;
@@ -1322,6 +1324,10 @@ class _PdfPagePdfium extends PdfPage {
       }
     }, (docHandle: document.document.address, pageNumber: pageNumber, bbLeft: bbLeft, bbBottom: bbBottom));
   }
+
+  @override
+  /// Delegating method to the rich-text implementation in the part file.
+  Future<PdfPageRichRawText?> loadRichText2() async => loadRichText3();
 
   @override
   Future<List<PdfLink>> loadLinks({bool compact = false, bool enableAutoLinkDetection = true}) async {

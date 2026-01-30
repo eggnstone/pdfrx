@@ -11,6 +11,8 @@ import 'pdf_page_status_change.dart';
 import 'pdf_text.dart';
 import 'pdf_text_formatter.dart';
 
+part 'pdf_page_rich.dart';
+
 /// Handles a PDF page in [PdfDocument].
 ///
 /// See [PdfDocument.pages].
@@ -89,6 +91,8 @@ abstract class PdfPage {
   /// If the page is not loaded yet (progressive loading case only), this function returns null.
   Future<PdfPageRawText?> loadText();
 
+  Future<PdfPageRichRawText?> loadRichText2();
+
   /// Load links.
   ///
   /// If [compact] is true, it tries to reduce memory usage by compacting the link data.
@@ -114,9 +118,6 @@ extension PdfPageBaseExtensions on PdfPage {
   /// If the page is not loaded yet (progressive loading case only), this function returns null.
   Future<PdfPageText> loadStructuredText({bool ensureLoaded = true}) =>
       PdfTextFormatter.loadStructuredText(this, pageNumberOverride: pageNumber);
-
-  Future<PdfPageRichText> loadRichText({bool ensureLoaded = true}) =>
-      PdfTextFormatter.loadRichText(this, pageNumberOverride: pageNumber);
 
   /// Stream of page status change events for this page.
   ///

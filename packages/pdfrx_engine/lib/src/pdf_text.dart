@@ -7,6 +7,8 @@ import 'pdf_page.dart';
 import 'pdf_rect.dart';
 import 'utils/list_equals.dart';
 
+part 'pdf_text_rich.dart';
+
 /// PDF's raw text and its associated character bounding boxes.
 class PdfPageRawText {
   PdfPageRawText(this.fullText, this.charRects);
@@ -152,35 +154,6 @@ class PdfPageText {
   int get hashCode => pageNumber.hashCode ^ fullText.hashCode ^ charRects.hashCode ^ fragments.hashCode;
 }
 
-/// A container for the rich text result.
-class PdfPageRichText {
-  const PdfPageRichText({
-    required this.pageNumber,
-    required this.fullText,
-    required this.charRects,
-    required this.fragments,
-  });
-
-  /// Page number. The first page is 1.
-  final int pageNumber;
-
-  /// Full text of the page.
-  final String fullText;
-
-  /// Bounds corresponding to characters in the full text.
-  final List<PdfRect> charRects;
-
-  /// Get text fragments that organizes the full text structure.
-  ///
-  /// The [fullText] is the composed result of all fragments' text.
-  /// Any character in [fullText] must be included in one of the fragments.
-  final List<PdfPageRichTextFragment> fragments;
-
-  PdfPageText toPdfPageText() {
-    return PdfPageText(pageNumber: pageNumber, fullText: fullText, charRects: charRects, fragments: fragments);
-  }
-}
-
 /// Text direction in PDF page.
 enum PdfTextDirection {
   /// Left to Right
@@ -243,37 +216,6 @@ class PdfPageTextFragment {
 
   @override
   int get hashCode => index.hashCode ^ bounds.hashCode ^ text.hashCode;
-}
-
-/// A subclass of [PdfPageTextFragment] that includes font styling metadata.
-class PdfPageRichTextFragment extends PdfPageTextFragment {
-  PdfPageRichTextFragment({
-    required PdfPageRichText pageText,
-    required this.fontSize,
-    required this.fontWeight,
-    required this.isItalic,
-    required this.isForceBold,
-    required super.index,
-    required super.length,
-    required super.bounds,
-    required super.charRects,
-    required super.direction,
-  }) : super(pageText: pageText.toPdfPageText());
-
-  /// Font size in PDF points (approx 1/72 inch).
-  final double fontSize;
-
-  /// The visual weight (e.g., 400=Normal, 700=Bold).
-  final FontWeight fontWeight;
-
-  /// True if the text is Italic.
-  final bool isItalic;
-
-  /// True if the PDF forces a fake bold effect.
-  final bool isForceBold;
-
-  /// Helper to check effective bold (either True Bold or Force Bold).
-  bool get isEffectiveBold => fontWeight.index >= FontWeight.w600.index || isForceBold;
 }
 
 /// Text range in a PDF page, which is typically used to describe text selection.
